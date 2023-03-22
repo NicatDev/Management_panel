@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  postgres:
+    container_name:  postgres-mp-db
+    image: postgres:11
+    ports:
+      - "5432:5432" # Bind host port 5432 to PostgresSQL port 5432
+    env_file: .env
+    volumes:
+      - ./pgdb:/var/lib/postgresql/data
+#      - /tmp/.X11-unix:/tmp/.X11-unix
+
+  redis:
+    container_name: redis
+    image: redis:5
+    restart: "on-failure"
+    expose:
+      - '6379'
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./redisdb:/var/lib/redis
+
+  celery: &celery
+    container_name: celery
+    build:
+      context: .
+      dockerfile: celery.dockerfile
+    env_file: .env
+    volumes:
+      - ../../app:/app
+#      - /tmp/.X11-unix:/tmp/.X11-unix
+    command: bash -c "cd /app/ && celery --app=app.celery:app worker -B --loglevel=INFO"
+    depends_on:
+      - app
+      - redis
+    links:
+      - postgres
+      - redis
+
+  app:
+    container_name: mp-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "8000:8000"
+    restart: always
+    links:
+      - postgres
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ../../app:/app
+    command: bash -c " source /venv/bin/activate && python /app/manage.py makemigrations --noinput && python /app/manage.py migrate && python /app/manage.py runserver 0.0.0.0:8000"

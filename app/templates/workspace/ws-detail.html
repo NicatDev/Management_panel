@@ -1,0 +1,338 @@
+{% extends 'base/index.html' %}
+{% load static i18n l10n widget_tweaks ws_helper %}
+
+{% block css %}
+<style>
+    .hidden-form {
+        display: none;
+    }
+    /* Important part */
+    .modal-dialog{
+        overflow-y: initial !important
+    }
+    .modal-body{
+        height: 60vh;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<!-- Body: Body -->
+<div class="body d-flex py-lg-3 py-md-2">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Task Management</h3>
+                    <div class="col-auto d-flex w-sm-100">
+                        <div class="d-flex">
+                            <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
+                                <i class="icofont-info-square fs-5"></i>
+                            </a>
+                            <div class="avatar-list avatar-list-stacked px-3" style="padding: 0.2rem;">
+                                {% for member in workspace|members %}
+                                {% if member.profile_picture %}
+                                <img class="avatar rounded-circle" src="{{ member.profile_picture.url }}"
+                                     alt="member" title="{{ member.get_full_name }}">
+                                {% else %}
+                                <span class="avatar justify-content-center align-items-center rounded-circle light-success-bg"><span class="avatar-letters-small">{{ member.get_full_name|get_first_letters }}</span></span>
+                                {% endif %}
+                                {% endfor %}
+                                <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal" data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
+                            </div>
+                        </div>
+                        <a href="{% url 'clients' workspace.slug %}" class="btn btn-dark btn-set-task w-sm-100"><i class="icofont-users me-2 fs-6"></i>Clients</a>
+                        <button style="margin-left: 5px" type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#createtask"><i class="icofont-plus-circle me-2 fs-6"></i>Create Task</button>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Row end  -->
+        <div class="row clearfix  g-3">
+            <div class="col-lg-12 col-md-12 flex-column">
+                <div class="row g-3 row-deck">
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
+                        <div class="card">
+                            <div class="card-header py-3">
+                                <h6 class="mb-0 fw-bold ">Task Progress</h6>
+                            </div>
+                            <div class="card-body mem-list">
+                                <div class="progress-count mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold d-flex align-items-center">UI/UX Design</h6>
+                                        <span class="small text-muted">02/07</span>
+                                    </div>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar light-info-bg" role="progressbar" style="width: 92%" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-count mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold d-flex align-items-center">Website Design</h6>
+                                        <span class="small text-muted">01/03</span>
+                                    </div>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-lightgreen" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-count mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold d-flex align-items-center">Quality Assurance</h6>
+                                        <span class="small text-muted">02/07</span>
+                                    </div>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar light-success-bg" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-count mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold d-flex align-items-center">Development</h6>
+                                        <span class="small text-muted">01/05</span>
+                                    </div>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar light-orange-bg" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-count mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold d-flex align-items-center">Testing</h6>
+                                        <span class="small text-muted">01/08</span>
+                                    </div>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-lightyellow" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
+                        <div class="card">
+                            <div class="card-header py-3">
+                                <h6 class="mb-0 fw-bold ">Recent Activity</h6>
+                            </div>
+                            <div class="card-body mem-list">
+                                {% for action in actions %}
+                                <div class="timeline-item ti-danger border-bottom ms-2">
+                                    <div class="d-flex">
+                                        <span class="avatar d-flex justify-content-center align-items-center rounded-circle light-success-bg"><span class="avatar-letters-small">{{ action.user.get_full_name|get_first_letters }}</span></span>
+                                        <div class="flex-fill ms-3">
+                                            <div class="mb-1"><strong>{{ action.user }} {{ action.action_type }} {{ action.task }}</strong></div>
+                                            <span class="d-flex text-muted">{{ action.timestamp|date:'d m Y H:M' }}</span>
+                                        </div>
+                                    </div>
+                                </div> <!-- timeline item end  -->
+                                {% endfor %}
+                            </div>
+                        </div> <!-- .card: My Timeline -->
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12">
+                        <div class="card">
+                            <div class="card-header py-3">
+                                <h6 class="mb-0 fw-bold ">Workspace Members</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="flex-grow-1 mem-list">
+                                    {% for member in ws_members %}
+                                    <div class="py-2 d-flex align-items-center border-bottom">
+
+                                        <div class="d-flex ms-2 align-items-center flex-fill">
+                                            {% if member.profile_picture %}
+                                            <img src="{{ member.profile_picture.url }}" class="avatar lg rounded-circle img-thumbnail" alt="avatar">
+                                            {% else %}
+                                            <span class="avatar-new d-flex justify-content-center align-items-center rounded-circle light-success-bg"><span class="avatar-letters">{{ member.get_full_name|get_first_letters }}</span></span>
+                                            {% endif %}
+                                            <div class="d-flex flex-column ps-2">
+                                                <h6 class="fw-bold mb-0">{{ member.get_full_name }}</h6>
+<!--                                                <span class="small text-muted">Ui/UX Designer</span>-->
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn light-danger-bg text-end" data-bs-toggle="modal" href="{% url 'remove-member' workspace.slug member.id %}"
+                                                        data-member-name="{{ member.get_full_name }}" data-ws-name="{{ workspace.title|title }}" data-bs-target="#dremovemember">Remove</button>
+                                    </div>
+                                    {% empty %}
+                                    <h6>There is no member to show</h6>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div> <!-- .card: My Timeline -->
+                    </div>
+                </div>
+                <div class="row g-3 gy-5 py-3 row-deck mt-xl-5">
+                    {% for task in workspace.tasks.all %}
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="task-info d-flex align-items-center justify-content-between">
+                                    <h6 class="light-success-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">{{ task.client.get_full_name }}
+                                    </h6>
+                                    <div class="task-priority d-flex flex-column align-items-center justify-content-center">
+                                        <div class="avatar-list avatar-list-stacked m-0">
+                                            {% for member in task.assignee.all %}
+                                                {% if member.profile_picture %}
+                                                    <img class="avatar rounded-circle small-avt" src="{{ member.profile_picture.url }}"
+                                                         alt="member" title="{{ member.get_full_name }}">
+                                                {% else %}
+                                                    <span class="avatar d-flex justify-content-center align-items-center rounded-circle light-success-bg" title="{{ member.get_full_name }}"><span class="avatar-letters-small">{{ member.get_full_name|get_first_letters }}</span></span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <span class="badge bg-warning text-end mt-2">{{ task.status }}</span>
+                                    </div>
+                                </div>
+                                <a href="{% url 'task-detail' workspace.slug task.slug %}"><p class="py-2 mb-0">{{ task.title|title }}</p></a>
+                                <div class="row g-2 pt-4">
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="icofont-paper-clip"></i>
+                                            <span class="ms-2">{{ task.files.count }} Attach</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="icofont-group-students "></i>
+                                            <span class="ms-2">{{ task.assignee.count }} Members</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dividers-block"></div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <h4 class="small fw-bold mb-0">Progress</h4>
+                                    <span class="small light-danger-bg  p-1 rounded"><i
+                                            class="icofont-ui-clock"></i>{% if task.time_till_deadline > 0 %} {{ task.time_till_deadline }} Days Left{% else %} Deadline Has Reached{% endif %}</span>
+                                </div>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar light-success-bg" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <h3>There is no task to show</h3>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Members-->
+<div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title  fw-bold" id="addUserLabel">Employee Invitation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% include 'partials/search.html' %}
+                <div class="members_list">
+                    <h6 class="fw-bold ">Employee </h6>
+                    <ul class="list-unstyled list-group list-group-custom list-group-flush mb-0" id="member-list">
+                        {% include 'partials/member_list.html' %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create task-->
+<div class="modal fade" id="createtask" tabindex="-1"  aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title  fw-bold" id="createprojectlLabel"> Create Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <fieldset>
+                        <div id="assign-form">
+                            <div class="form-main">
+                                <div class="mb-3">
+                                    <label  class="form-label">Select client</label>
+                                    {% render_field form.client class="form-select" %}
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Title</label>
+                                    {% render_field form.title class="form-control" placeholder="Write title" %}
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Description</label>
+                                    {% render_field form.description class="form-control" rows="5" placeholder="Write description" %}
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Sharing type</label>
+                                    {% render_field form.sharing_type class="form-select" %}
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Deadline</label>
+                                    {% render_field form.deadline type="datetime-local" class="form-control" id="datepickerded" %}
+                                </div>
+                            </div>
+                            {% if formset %}
+                            {{ formset.management_form }}
+                                {% for f_form in formset %}
+                                    {{ f_form }}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div id="empty-form" class="hidden-form">{{ formset.empty_form }}</div>
+                        <button id="add-more" class="btn btn-secondary mt-2" type="button">Assign member</button>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal  Remove Task-->
+<div class="modal fade" id="dremovemember" tabindex="-1"  aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title  fw-bold" id="dremovetaskLabel"> Remove From Workspace?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body justify-content-center flex-column d-flex">
+                <i class="icofont-ui-rate-remove text-danger display-2 text-center mt-2"></i>
+                <p id="removeTaskModalText" class="mt-4 fs-5 text-center"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="removeMemberButton" class="btn btn-danger color-fff">Remove</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--</div>-->
+<!--</div>-->
+{% endblock %}
+
+{% block js %}
+<script>
+    const addMoreBtn = document.getElementById('add-more')
+    const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+
+    addMoreBtn.addEventListener('click', add_new_form)
+    function add_new_form(event) {
+        if (event) {
+            event.preventDefault()
+        }
+        const currentAssignForms = document.getElementsByClassName('form-group')
+        const fromCopyTarget = document.getElementById('assign-form')
+        const copyEmptyFormElem = document.getElementById('empty-form').cloneNode(true)
+        copyEmptyFormElem.setAttribute('class', 'form-group mt-5')
+        copyEmptyFormElem.setAttribute('id', `form-${currentAssignForms.length}`)
+        const regex = new RegExp('__prefix__', 'g')
+        copyEmptyFormElem.innerHTML = copyEmptyFormElem.innerHTML.replace(regex, currentAssignForms.length)
+        totalNewForms.setAttribute('value', currentAssignForms.length + 1)
+        fromCopyTarget.append(copyEmptyFormElem)
+    }
+</script>
+{% endblock %}

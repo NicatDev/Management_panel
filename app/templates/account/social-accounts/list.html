@@ -1,0 +1,99 @@
+{% extends 'base/index.html' %}
+{% load static i18n l10n widget_tweaks %}
+
+{% block content %}
+<div class="body d-flex py-lg-3 py-md-2">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Social Accounts</h3>
+                    <div class="col-auto d-flex w-sm-100">
+                        <div class="dropdown ">
+                            <button class="btn btn-primary dropdown-toggle  " type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="icofont-plus-circle me-2 fs-6"></i>Add Social Account
+                            </button>
+                            <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#instagram-add" {% if instagram %}disabled{% endif %}>Instagram</button></li>
+                            <li><a class="dropdown-item" href="#">Facebook</a></li>
+                            <li><a class="dropdown-item" href="#">TikTok</a></li>
+                            <li><a class="dropdown-item" href="#">Youtube</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- Row end  -->
+        <div class="row clearfix g-3">
+            <div class="col-sm-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>Social Account</th>
+                                <th>Created Date</th>
+                                <th>Status</th>
+                                <th>Enter 2FA</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if instagram %}
+                                <tr>
+                                    <td>
+                                        <a href="ticket-detail.html" class="fw-bold text-secondary">Instagram</a>
+                                    </td>
+                                    <td>
+                                        {{ instagram.created_at|date:'d M Y' }}
+                                    </td>
+                                    <td><span class="badge bg-warning">In Progress</span></td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#enter2FA"><i class="icofont-edit text-success"></i></button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#instagram-edit"><i class="icofont-edit text-success"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#delete-instagram"><i class="icofont-ui-delete text-danger"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div><!-- Row End -->
+    </div>
+</div>
+
+<!-- Enter 2FA-->
+<div class="modal fade" id="enter2FA" tabindex="-1"  aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title  fw-bold"> Two Factor Authentication</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {% render_field instagram2fa_form.twoFACode class="form-control" placeholder="Enter 2FA code" %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="instagram-2fa" class="btn btn-primary">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'account/social-accounts/partials/add-instagram.html' %}
+{% include 'account/social-accounts/partials/edit-instagram.html' %}
+{% include 'account/social-accounts/partials/delete-instagram.html' %}
+{% endblock %}

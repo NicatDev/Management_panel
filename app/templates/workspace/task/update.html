@@ -1,0 +1,55 @@
+{% extends 'base/index.html' %}
+{% load static i18n l10n crispy_forms_tags widget_tweaks %}
+
+{% block content %}
+<!-- Modal -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Your Workspaces</a></li>
+        <li class="breadcrumb-item" aria-current="page">{{ workspace.title }}</li>
+        <li class="breadcrumb-item" aria-current="page">{{ client.get_full_name }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ task.title }}</li>
+    </ol>
+</nav>
+
+<br>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Update task</h1>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="form-group">
+                            {% render_field form.text placeholder="Paylaşım mətni" %}
+                            {% render_field form.file %}
+<!--                            <div class="add-photo mt-3">-->
+<!--                                <button class="add-photo__btn" type="button" onclick="uploadImage()">Faylı əlavə et</button>-->
+<!--                                    <div hidden>-->
+<!--                                        {% render_field form.file id='filebtn' %}-->
+<!--                                    </div>-->
+<!--                                <button class="add-photo__btn" onclick="removeImage()">Faylı sil</button>-->
+<!--                            </div>-->
+                        </fieldset>
+                    </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function uploadImage() {
+        document.getElementById('filebtn').click();
+    }
+    function removeImage() {
+        document.getElementById('file-clear_id').click();
+    }
+</script>
+{% endblock %}

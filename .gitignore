@@ -1,0 +1,13 @@
+bin/dev/pgdb
+bin/dev/redisdb
+# bin/dev/.env
+bin/prod/postgredb
+bin/prod/redisdb
+
+app/media
+.venv/
+venv/
+/venv/
+.idea/
+*.pyc
+*.log

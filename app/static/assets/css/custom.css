@@ -1,0 +1,13 @@
+.avatar-new {
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
+}
+.avatar-letters {
+    font-size: 26px;
+    color: black;
+}
+.avatar-letters-small {
+    font-size: 14px;
+    color: black;
+}

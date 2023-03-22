@@ -1,0 +1,51 @@
+{% load widget_tweaks %}
+{% if results %}
+    {% csrf_token %}
+    <ul>
+    {% for account in results %}
+        <li>
+            <form method="POST">
+            {{ account.email }}
+            <select id="account-type" name="account-type">
+                <option value="1">Admin</option>
+                <option value="2">Member</option>
+                <option value="3">Client</option>
+            </select>
+            <span
+                id="add-member-span"
+                hx-post="{% url 'add-member-to-ws' workspace.slug %}"
+                hx-vals='{"email": "{{account.email}}"}'
+                hx-target="#member-list"
+                style="cursor: pointer;">Yoxla</span>
+            </form>
+        </li>
+        {% block js %}
+        <script>
+            var selectField = document.getElementById('account-type');
+            var checkEmailButton = document.getElementById('add-member-span');
+
+            // Set initial hx-vals attribute on page load
+            var selectedOption = selectField.options[selectField.selectedIndex].value;
+            var email = "{{ account.email }}";
+            var data = {"email": email, "type": selectedOption};
+            console.log(selectedOption)
+            console.log(email)
+            checkEmailButton.setAttribute('hx-vals', JSON.stringify(data));
+
+            selectField.addEventListener('change', function() {
+                var selectedOption = selectField.options[selectField.selectedIndex].value;
+                var email = "{{ account.email }}";
+                console.log(selectedOption)
+                console.log(email)
+                var data = {"email": email, "type": selectedOption};
+                console.log(data)
+                console.log(JSON.stringify(data))
+                checkEmailButton.setAttribute('hx-vals', JSON.stringify(data));
+            });
+        </script>
+        {% endblock %}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nəticə tapılmadı</p>
+{% endif %}

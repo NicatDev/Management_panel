@@ -1,0 +1,22 @@
+<!-- Modal  Delete Folder/ File-->
+<div class="modal fade" id="delete-instagram" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title  fw-bold" id="deleteprojectLabel"> Delete Instagram Account Permanently?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body justify-content-center flex-column d-flex">
+                    <i class="icofont-ui-delete text-danger display-2 text-center mt-2"></i>
+                    <p class="mt-4 fs-5 text-center">It will be deleted permanently, are you sure?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="deleteButton" name="delete-instagram">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

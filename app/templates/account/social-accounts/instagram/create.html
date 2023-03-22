@@ -1,0 +1,50 @@
+{% extends 'base/index.html' %}
+{% load static i18n l10n widget_tweaks %}
+
+{% block content %}
+<div class="body d-flex py-3">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Add instagram account</h3>
+                </div>
+            </div>
+        </div> <!-- Row end  -->
+
+        <div class="row align-item-center">
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <form id="basic-form" method="POST">
+                            {% csrf_token %}
+                            <div class="row g-3 align-items-center mb-5">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Username</label>
+                                        {% render_field form.username class="form-control" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Password</label>
+                                        {% render_field form.password class="form-control" type="password" %}
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Confirm Password</label>
+                                        {% render_field form.confirm_password class="form-control" type="password" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!-- Row end  -->
+
+    </div>
+</div>
+{% endblock %}
