@@ -96,7 +96,7 @@ DATABASES = {
             "POSTGRES_PASSWORD",
             "6NwpPtvGyCsMLAKDZtazEP9WjANze25eP3e2UJdWrgrrKq",
         ),
-        "HOST": os.environ.get("POSTGRES_HOST", "postgres"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }

@@ -60,8 +60,7 @@ services:
     build:
       context: ../..
       dockerfile: celery.dockerfile
-    environment:
-      - CELERY_BROKER_URL=redis://:dKqs72RhtaPPYyfN@redis:6379/0
+    env_file: .env
     volumes:
       - ../../app:/app
     command: bash -c "cd /app/ && celery --app=app.celery:app worker -B --loglevel=INFO"
