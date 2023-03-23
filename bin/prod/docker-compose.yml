@@ -49,7 +49,7 @@ services:
     build:
       context: ../..
       dockerfile: redis.dockerfile
-    image: redis:4.0.11
+    image: redis:5
     restart: "on-failure"
     container_name: redis
     ports:
