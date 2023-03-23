@@ -25,12 +25,12 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks(lambda: app_settings.INSTALLED_APPS)
 app.autodiscover_tasks()
 
-app.conf.beat_schedule = {
-    'check_task_deadlines': {
-        'task': 'workspace.tasks.check_task_deadlines',
-        'schedule': timedelta(seconds=60), # Run every minute by default
-    },
-}
+# app.conf.beat_schedule = {
+#     'check_task_deadlines': {
+#         'task': 'workspace.tasks.check_task_deadlines',
+#         'schedule': timedelta(seconds=60), # Run every minute by default
+#     },
+# }
 
 @app.task(bind=True)
 def debug_task(self):
@@ -42,7 +42,7 @@ if settings.PROD:
         BROKER_URL='redis://:{password}@redis:6379/0'.format
         (password='dKqs72RhtaPPYyfN'
          ),
-        # CELERYBEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler',
+        CELERYBEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler',
         CELERY_RESULT_BACKEND='redis://:{password}@redis:6379/1'.format(
             password='dKqs72RhtaPPYyfN'
         ),
