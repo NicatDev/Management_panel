@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-8(4v21w3)^+e*-kig*j1dbj7t4xw&n!e2rk7q@x-&#9m)=%kbo
 DEBUG = os.environ.get("DEBUG", False) != "False"
 PROD = not DEBUG
 
-ALLOWED_HOSTS = ("*",) if PROD else ["*"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
