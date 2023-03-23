@@ -34,8 +34,6 @@ services:
       - postgres
     depends_on:
       - "postgres"
-    networks:
-      - default
 
   postgres:
     container_name:  postgres-db
@@ -45,8 +43,6 @@ services:
     volumes:
       - ./pgdb:/var/lib/postgresql/data
     env_file: .env
-    networks:
-      - default
 
   redis:
     container_name: redis
@@ -58,8 +54,6 @@ services:
       - '6379:6379'
     volumes:
       - ./redisdb:/var/lib/redis
-    networks:
-      - default
 
   celery: &celery
     container_name: celery
@@ -77,8 +71,6 @@ services:
     links:
       - postgres
       - redis
-    networks:
-      - default
 
 
 networks:
