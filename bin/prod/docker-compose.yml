@@ -34,6 +34,7 @@ services:
       - postgres
     depends_on:
       - "postgres"
+      - "redis"
 
   postgres:
     container_name:  postgres-db
@@ -45,13 +46,14 @@ services:
     env_file: .env
 
   redis:
-    container_name: redis
-    image: redis:5
+    build:
+      context: ../..
+      dockerfile: redis.dockerfile
+    image: redis:4.0.11
     restart: "on-failure"
-    expose:
-      - '6379'
+    container_name: redis
     ports:
-      - '6379:6379'
+      - "6379:6379"
     volumes:
       - ./redisdb:/var/lib/redis
     env_file: .env
