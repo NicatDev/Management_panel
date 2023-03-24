@@ -25,12 +25,12 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks(lambda: app_settings.INSTALLED_APPS)
 app.autodiscover_tasks()
 
-# app.conf.beat_schedule = {
-#     'check_task_deadlines': {
-#         'task': 'workspace.tasks.check_task_deadlines',
-#         'schedule': timedelta(seconds=60), # Run every minute by default
-#     },
-# }
+app.conf.beat_schedule = {
+    'check_task_deadlines': {
+        'task': 'workspace.tasks.check_task_deadlines',
+        'schedule': timedelta(seconds=60), # Run every minute by default
+    },
+}
 
 @app.task(bind=True)
 def debug_task(self):

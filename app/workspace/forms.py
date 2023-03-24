@@ -60,8 +60,8 @@ class DeadlineForm(forms.ModelForm):
                                                                                  'type': 'datetime-local'}))
     end = forms.DateTimeField(required=True, widget=forms.DateTimeInput(attrs={'class': 'form-control mb-3 mt-2',
                                                                                  'type': 'datetime-local'}))
-    # task_type = ContentType.objects.get(model='task')
-    status = forms.ModelChoiceField(queryset=Status.objects.all(),
+    task_type = ContentType.objects.get(model='task')
+    status = forms.ModelChoiceField(queryset=Status.objects.filter(type=task_type),
                                     empty_label="Select status",
                                     widget=forms.Select(attrs={'class': 'form-select mb-3 mt-2'}))
     class Meta:
