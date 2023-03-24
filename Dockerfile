@@ -1,29 +1,44 @@
 FROM python:3.10-slim
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
 
-# # Install X Window System and dependencies
-# RUN apt-get update \
-#     && apt-get install -y --no-install-recommends x11-xserver-utils scrot python3-tk \
-#     && rm -rf /var/lib/apt/lists/*
-#
-# # Set up X11 forwarding
-# RUN apt-get update \
-#     && apt-get install -y --no-install-recommends \
-#         xauth \
-#         x11-apps \
-#         xvfb \
-#     && rm -rf /var/lib/apt/lists/*
-#
-# RUN mkdir -p /etc/ssh/
-# RUN echo "X11UseLocalhost no" >> /etc/ssh/sshd_config
-#
-# RUN echo "export DISPLAY=:0" >> /root/.bashrc
+ENV PYTHONUNBUFFERED 1
+ENV DEBUG False
+ENV APP_ROOT /code
 
-WORKDIR /app
-ADD requirements.txt /requirements.txt
+WORKDIR ${APP_ROOT}
 
-RUN pip install virtualenvwrapper
-RUN python3 -m venv /venv
-RUN /venv/bin/pip install -U pip
-RUN /venv/bin/pip install --no-cache-dir -r /requirements.txt
+COPY ./requirements.txt requirements.txt
+
+RUN apt-get update && \
+  apt-get install -y \
+  libglib2.0-0 \
+  libnss3 \
+  libgconf-2-4 \
+  libfontconfig \
+  locales \
+  locales-all \
+  build-essential \
+  python3-all-dev \
+  libpq-dev \
+  libjpeg-dev \
+  binutils \
+  libproj-dev \
+  gdal-bin \
+  libxml2-dev \
+  libxslt1-dev \
+  zlib1g-dev \
+  libffi-dev \
+  libssl-dev \
+  curl \
+  gettext \
+  python3-opencv \
+  libzbar-dev \
+  && pip install --upgrade pip \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apt-get clean --dry-run
+
+COPY ./mime.types /etc/mime.types
+COPY ./uwsgi.ini /conf/uwsgi.ini
+COPY ./app /code
+
+# Start uWSGI
+CMD [ "uwsgi", "--ini", "/conf/uwsgi.ini"]
