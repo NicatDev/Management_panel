@@ -3,20 +3,20 @@
     {% csrf_token %}
     <ul>
     {% for account in results %}
-        <li>
+        <li style="padding: 10px;">
             <form method="POST">
             {{ account.email }}
-            <select id="account-type" name="account-type">
+            <select id="account-type" name="account-type" style="margin-left: 10%;">
                 <option value="1">Admin</option>
                 <option value="2">Member</option>
                 <option value="3">Client</option>
             </select>
             <span
-                id="add-member-span"
+                id="add-member-span" class="btn btn-info"
                 hx-post="{% url 'add-member-to-ws' workspace.slug %}"
                 hx-vals='{"email": "{{account.email}}"}'
                 hx-target="#member-list"
-                style="cursor: pointer;">Yoxla</span>
+                style="cursor: pointer; margin-left: 15%;">Add</span>
             </form>
         </li>
         {% block js %}

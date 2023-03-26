@@ -27,9 +27,9 @@
                     <h3 class="fw-bold mb-0">Task Management</h3>
                     <div class="col-auto d-flex w-sm-100">
                         <div class="d-flex">
-                            <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
-                                <i class="icofont-info-square fs-5"></i>
-                            </a>
+<!--                            <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">-->
+<!--                                <i class="icofont-info-square fs-5"></i>-->
+<!--                            </a>-->
                             <div class="avatar-list avatar-list-stacked px-3" style="padding: 0.2rem;">
                                 {% for member in workspace|members %}
                                 {% if member.profile_picture %}
@@ -43,7 +43,7 @@
                             </div>
                         </div>
 <!--                        <a href="{% url 'clients' workspace.slug %}" class="btn btn-dark btn-set-task w-sm-100"><i class="icofont-users me-2 fs-6"></i>Clients</a>-->
-                        <button style="margin-left: 5px" type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#createtask"><i class="icofont-plus-circle me-2 fs-6"></i>Create Task</button>
+                        <button type="button" class="btn btn-dark btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#createtask"><i class="icofont-plus-circle me-2 fs-6"></i>Create Task</button>
                     </div>
                 </div>
             </div>
