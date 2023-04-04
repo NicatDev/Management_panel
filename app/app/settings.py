@@ -37,6 +37,7 @@ APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    # 'django-htmx',
     'crispy_forms',
     'ckeditor',
     'celery',

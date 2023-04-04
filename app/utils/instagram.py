@@ -1,3 +1,5 @@
+import json
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -76,19 +78,11 @@ def check_account(account, instagram_id):
     save_info.click()
     time.sleep(2)
 
-    # Find the session ID cookie
-    session_id_cookie = next((cookie for cookie in driver.get_cookies() if cookie['name'] == 'sessionid'), None)
-
-    # Extract the session ID value from the session ID cookie
-    session_id = session_id_cookie['value'] if session_id_cookie else None
-    instagram.session_id = session_id
-    instagram.save()
-
-    # # Save the cookies
-    # if not os.path.exists(f"{cookies_path}/{account.id}"):
-    #     os.makedirs(f"{cookies_path}/{account.id}")
-    # with open(f"{cookies_path}/{account.id}/cookies.pkl", "wb") as f:
-    #     pickle.dump(driver.get_cookies(), f)
+    # Save the cookies
+    if not os.path.exists(f"{cookies_path}/{account.id}"):
+        os.makedirs(f"{cookies_path}/{account.id}")
+    with open(f"{cookies_path}/{account.id}/cookies.pkl", "wb") as f:
+        json.dump(driver.get_cookies(), f)
     print('yoxladi ===============================================================')
 
 

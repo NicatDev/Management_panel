@@ -41,6 +41,7 @@ class TaskCreateForm(forms.ModelForm):
     deadline = forms.DateTimeField()
     sharing_type = forms.ChoiceField(choices=SHARING_TYPES,
                                      widget=forms.Select(attrs={'class': 'form-select'}))
+    # cover_image = forms.ImageField(required=False)
 
     class Meta:
         model = Task
@@ -92,4 +93,4 @@ class TaskUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['client', 'title', 'description', 'text', 'file', 'sharing_platform', 'sharing_type', 'deadline']
+        fields = ['client', 'title', 'description', 'text', 'file', 'cover_image', 'sharing_platform', 'sharing_type', 'deadline']

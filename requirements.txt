@@ -64,3 +64,10 @@ wcwidth==0.2.6
 wsproto==1.2.0
 instagrapi==1.17.1
 uwsgi==2.0.21
+
+selenium-stealth
+beautifulsoup4
+requests
+cryptography
+lxml
+fake-useragent

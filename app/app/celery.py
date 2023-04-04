@@ -28,7 +28,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'check_task_deadlines': {
         'task': 'workspace.tasks.check_task_deadlines',
-        'schedule': timedelta(seconds=60), # Run every minute by default
+        'schedule': timedelta(seconds=1800), # Run every minute by default
     },
 }
 

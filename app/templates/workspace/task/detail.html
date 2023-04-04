@@ -177,6 +177,10 @@
                                     <label class="form-label">Task Images & Videos</label>
                                     {% render_field form.file class="form-control" type="file" id="formFileMultipleone" %}
                                 </div>
+                                <div class="mb-3 cover-image">
+                                    <label class="form-label">Cover Image</label>
+                                    {% render_field form.cover_image class="form-control" %}
+                                </div>
                                 <div class="mb-3">
                                     <label  class="form-label">Sharing platform</label>
                                     {% render_field form.sharing_platform class="form-select" %}
@@ -403,4 +407,16 @@
         fromCopyTarget.append(copyEmptyFormElem)
     }
 </script>
+<!--<script>-->
+<!--    document.querySelector('[name="sharing_type"]').addEventListener('htmx:afterSwap', function(evt) {-->
+<!--        var coverImage = document.querySelector('.cover-image');-->
+<!--        console.log(coverImage)-->
+<!--        console.log(evt.detail.trigger.getAttribute('value'))-->
+<!--        if (evt.detail.trigger.getAttribute('value') === 2) {-->
+<!--            coverImage.style.display = 'block';-->
+<!--        } else {-->
+<!--            coverImage.style.display = 'none';-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
 {% endblock %}

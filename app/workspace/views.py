@@ -304,11 +304,12 @@ def task_detail(request, ws_slug, task_slug):
         else:
             form = TaskUpdateForm(request.POST or None, request.FILES, instance=task, wk_id=ws.id)
             if form.is_valid():
-                files = request.FILES.getlist('file')
+                # files = request.FILES.getlist('file')
                 obj = form.save()
                 Action.objects.create(user=request.user, action_type='updated', task=task)
-                for file in files:
-                    TaskFile.objects.create(task=obj, file=file)
+                # if len(files) > 1:
+                # for file in files:
+                #     TaskFile.objects.create(task=obj, file=file)
                 # for form2 in formset:  # Set the task instance for new forms
                 #     child = form2.save(commit=False)
                 #     child.task = obj

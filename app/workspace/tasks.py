@@ -12,6 +12,7 @@ from core.models import Notification
 from utils.instagram import publish_image
 from workspace.models import Task, Status
 from utils.notification import Notify, NotifyInstagram
+from utils.instagram_bot import InstagramBOT
 
 
 @shared_task(autoretry_for=(Exception,))
@@ -84,12 +85,34 @@ def notification_instagram(
 
 
 @shared_task
+@shared_task.locked()
 def share_post_at_instagram(task_id):
     # Get the post object using the post_id
     task = Task.objects.get(id=task_id)
+    client = task.client.instagram.first()
+    bot = InstagramBOT()
+    content_type = ContentType.objects.get_for_model(Task)
+    final_status = Status.objects.filter(order=22, type=content_type).first()
 
+    task.status = task.status.next_step
+    task.save()
     # Call the share_post function
-    publish_image(task.client, task)
+    # publish_image(task.client, task)
+    if task.sharing_type == 2 and task.cover_image:
+        bot.open_page()
+        bot.bypass_authorization(client.username, client.password)
+        result = bot.new_post(filepath=task.file.path, cover_filepath=task.cover_image.path, text=task.text)
+        if result:
+            task.status = final_status
+            task.save()
+
+    elif task.sharing_type == 1:
+        bot.open_page()
+        bot.bypass_authorization(client.username, client.password)
+        result = bot.new_post(filepath=task.file.path, text=task.text)
+        if result:
+            task.status = final_status
+            task.save()
 
 
 @shared_task
@@ -104,7 +127,7 @@ def check_task_deadlines():
         next_deadline = min(task.deadline for task in tasks)
         interval = (next_deadline - timezone.now()).total_seconds()
     else:
-        interval = 60  # Default to one minute
+        interval = 180  # Default to one minute
 
     # Reschedule the task to run again after the interval
     check_task_deadlines.apply_async(countdown=interval)

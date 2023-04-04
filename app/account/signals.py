@@ -22,8 +22,8 @@ def handle_instagram_changes(sender, **kwargs):
     created = kwargs.get("created")
     # if task created, then set base level status
     if created and insta.status is None:
-        # content_type = ContentType.objects.get_for_model(Instagram)
-        status = Status.objects.get(level="base")
+        content_type = ContentType.objects.get_for_model(Instagram)
+        status = Status.objects.get(level="base", type=content_type)
         insta.status = status
         insta.save()
         SocialPlatform.objects.get_or_create(account=insta.account, instagram=insta)

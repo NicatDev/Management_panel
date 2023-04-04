@@ -90,6 +90,12 @@ class Task(AbstractBaseModel, StatusNotifyEventFinder):
         blank=True,
         upload_to='task_files'
     )
+    cover_image = models.ImageField(
+        _('cover image'),
+        null=True,
+        blank=True,
+        upload_to='task_cover_images'
+    )
     client = models.ForeignKey(
         'account.Account',
         on_delete=models.CASCADE,
@@ -137,11 +143,12 @@ class Task(AbstractBaseModel, StatusNotifyEventFinder):
         blank=True
     )
 
+    @property
     def time_till_deadline(self):
         from django.utils import timezone
         now = timezone.now()
         res = self.deadline - now
-        return res.days
+        return int(res.days)
 
     def __str__(self):
         return self.title
@@ -176,19 +183,19 @@ class TaskFile(AbstractBaseModel):
     def __str__(self):
         return f'{self.task.title}'
 
-    def save(self, *args, **kwargs):
-        if not self.file:
-            return super().save(*args, **kwargs)
-
-        # Get the filename and extension of the uploaded file
-        filename, ext = os.path.splitext(self.file.name)
-
-        # Construct the new file path with the task ID included
-        new_path = f'files/task/{self.task.id}/{filename}{ext}'
-
-        # Set the file path and save the model
-        self.file.name = new_path
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.file:
+    #         return super().save(*args, **kwargs)
+    #
+    #     # Get the filename and extension of the uploaded file
+    #     filename, ext = os.path.splitext(self.file.name)
+    #
+    #     # Construct the new file path with the task ID included
+    #     new_path = f'files/task/{self.task.id}/{filename}{ext}'
+    #
+    #     # Set the file path and save the model
+    #     self.file.name = new_path
+    #     super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Task File")

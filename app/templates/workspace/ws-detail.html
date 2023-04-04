@@ -198,7 +198,7 @@
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <h4 class="small fw-bold mb-0">Progress</h4>
                                     <span class="small light-danger-bg  p-1 rounded"><i
-                                            class="icofont-ui-clock"></i>{% if task.time_till_deadline > 0 %} {{ task.time_till_deadline }} Days Left{% else %} Deadline Has Reached{% endif %}</span>
+                                            class="icofont-ui-clock"></i>{% if task.time_till_deadline == 1 %} {{ task.time_till_deadline }} Day Left{% elif task.time_till_deadline > 1 %} {{ task.time_till_deadline }} Days Left{% else %} Deadline Has Reached{% endif %}</span>
                                 </div>
                                 <div class="progress" style="height: 10px;">
                                     <div class="progress-bar light-success-bg" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
