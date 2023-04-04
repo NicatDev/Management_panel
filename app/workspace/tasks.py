@@ -85,7 +85,6 @@ def notification_instagram(
 
 
 @shared_task
-@shared_task.locked()
 def share_post_at_instagram(task_id):
     # Get the post object using the post_id
     task = Task.objects.get(id=task_id)
